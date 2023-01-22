@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
 
+import CityName from '../../components/cityName/CityName';
+import CurrentWeather from '../../components/currentWeather/CurrentWeather';
+
 import getWeather from '../../api/getWeather';
 
-interface Props {}
-
-const Main: React.FC<Props> = (props) => {
-    const [currentWeather, setCurrentWeather] = useState();
+const Main: React.FC = () => {
+    const [currentWeather, setCurrentWeather] = useState<number>();
 
     useEffect(() => {
         getWeather().then((response) => {
             console.log(response);
-            setCurrentWeather(response.current_weather.temperature);
+            const curDegrees = Math.round(response.current_weather.temperature);
+            setCurrentWeather(curDegrees);
         });
     }, []);
 
@@ -23,9 +25,17 @@ const Main: React.FC<Props> = (props) => {
                 colors={['#1D2B64', '#F8CDDA']}
                 style={styles.background}
             />
-            <Text>Current weather</Text>
-            <Text>{currentWeather}</Text>
             <StatusBar style="auto" />
+
+            <View style={styles.currentWeather}>
+                <CityName cityName={'Katowice'} />
+                <CurrentWeather
+                    curWeather={{
+                        degrees: currentWeather,
+                    }}
+                />
+            </View>
+            <Image style={styles.image} source={require('./images/city.png')} />
         </View>
     );
 };
@@ -44,6 +54,14 @@ const styles = StyleSheet.create({
         top: 0,
         height: '100%',
         zIndex: -1,
+    },
+    currentWeather: {
+        paddingBottom: 100,
+    },
+    image: {
+        width: 370,
+        height: 240,
+        flexShrink: 0,
     },
 });
 
