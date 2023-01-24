@@ -7,6 +7,7 @@ import CityName from '../../components/cityName/CityName';
 import CurrentWeather from '../../components/currentWeather/CurrentWeather';
 
 import getWeather from '../../api/getWeather';
+import WeekWeather from '../../components/weekWeather/WeekWeather';
 
 const Main: React.FC = () => {
     const [currentWeather, setCurrentWeather] = useState<number>();
@@ -22,7 +23,10 @@ const Main: React.FC = () => {
     return (
         <View style={styles.container}>
             <LinearGradient
-                colors={['#1D2B64', '#F8CDDA']}
+                // Night
+                // colors={['#1D2B64', '#F8CDDA']}
+                // Day
+                colors={['#2976B8', '#FFFDE4']}
                 style={styles.background}
             />
             <StatusBar style="auto" />
@@ -36,6 +40,23 @@ const Main: React.FC = () => {
                 />
             </View>
             <Image style={styles.image} source={require('./images/city.png')} />
+            <WeekWeather
+                style={styles.weekWeather}
+                daysWeatherConfigs={[
+                    {
+                        dayName: 'Monday',
+                        degrees: 9,
+                    },
+                    {
+                        dayName: 'Tuesday',
+                        degrees: 13,
+                    },
+                    {
+                        dayName: 'Wednesday',
+                        degrees: 15,
+                    },
+                ]}
+            />
         </View>
     );
 };
@@ -59,9 +80,12 @@ const styles = StyleSheet.create({
         paddingBottom: 100,
     },
     image: {
-        width: 370,
+        width: '100%',
         height: 240,
         flexShrink: 0,
+    },
+    weekWeather: {
+        marginTop: -1,
     },
 });
 

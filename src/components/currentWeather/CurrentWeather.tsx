@@ -13,7 +13,10 @@ const CurrentWeather: React.FC<Props> = (props) => {
     const { curWeather } = props;
     return (
         <View style={styles.container}>
-            <Text style={styles.degrees}>{curWeather.degrees}&#8451;</Text>
+            <Text style={styles.degrees}>
+                {curWeather.degrees}
+                <Text style={styles.unit}>&#8451;</Text>
+            </Text>
             <Text style={styles.description}>Sunny</Text>
         </View>
     );
@@ -32,6 +35,10 @@ const styles = StyleSheet.create({
         textShadowColor: 'rgba(0, 0, 0, 0.25)',
         textShadowOffset: { width: 0, height: 4 },
         textShadowRadius: 4,
+    },
+    unit: {
+        fontSize: 38,
+        lineHeight: 44,
     },
     description: {
         fontSize: 28,
