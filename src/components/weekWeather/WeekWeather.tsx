@@ -5,12 +5,10 @@ import DayWeather from '../dayWeather/DayWeather';
 
 import { WeekDays } from '../../types/days';
 
-interface DayWeatherConfig {
+export interface DayWeatherConfig {
     dayName: WeekDays;
     degrees: number;
 }
-
-const DAYS_WEATHER_RENDER_LIMIT = 3;
 
 interface Props {
     style?: ViewStyle;
@@ -21,19 +19,17 @@ const WeekWeather: React.FC<Props> = (props) => {
     const { style = {}, daysWeatherConfigs = [] } = props;
 
     const weekDaysWeather = React.useMemo(() => {
-        return daysWeatherConfigs
-            .splice(0, DAYS_WEATHER_RENDER_LIMIT)
-            .map((config: DayWeatherConfig, index: number) => {
-                return (
-                    <DayWeather
-                        key={index}
-                        style={styles.dayWeather}
-                        weekDay={config.dayName}
-                        degrees={config.degrees}
-                    />
-                );
-            });
-    }, []);
+        return daysWeatherConfigs.map(
+            (config: DayWeatherConfig, index: number) => (
+                <DayWeather
+                    key={index}
+                    style={styles.dayWeather}
+                    weekDay={config.dayName}
+                    degrees={config.degrees}
+                />
+            )
+        );
+    }, [daysWeatherConfigs]);
 
     return <View style={[styles.container, style]}>{weekDaysWeather}</View>;
 };
@@ -45,9 +41,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#272536',
         paddingLeft: 20,
         paddingRight: 20,
-
-        // TODO move to the parent component
-        marginTop: -1,
     },
     dayWeather: {
         marginBottom: 15,
