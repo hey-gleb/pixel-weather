@@ -39,8 +39,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     degrees: {
-        fontSize: 64,
-        lineHeight: 77,
+        fontSize: 76,
+        lineHeight: 85,
         color: '#fff',
         textShadowColor: 'rgba(0, 0, 0, 0.25)',
         textShadowOffset: { width: 0, height: 4 },

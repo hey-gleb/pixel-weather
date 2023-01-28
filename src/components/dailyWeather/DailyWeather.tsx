@@ -41,9 +41,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#272536',
         paddingLeft: 30,
         paddingRight: 30,
+        paddingBottom: 30,
     },
     dayWeather: {
-        marginBottom: 15,
+        flex: 1,
     },
 });
 

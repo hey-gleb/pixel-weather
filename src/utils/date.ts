@@ -1,6 +1,7 @@
 // TODO replace with moment.js
 
 import { WeekDays } from '../types/days';
+import { Dayjs } from 'dayjs';
 
 const dayOfWeek: Record<number, WeekDays> = {
     0: 'Sunday',
@@ -12,4 +13,4 @@ const dayOfWeek: Record<number, WeekDays> = {
     6: 'Saturday',
 };
 
-export const getDayOfWeek = (date: Date): WeekDays => dayOfWeek[date.getDay()];
+export const getDayOfWeek = (date: Dayjs): WeekDays => dayOfWeek[date.day()];

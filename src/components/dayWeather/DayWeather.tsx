@@ -29,7 +29,8 @@ const DayWeather: React.FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
     container: {
-        height: 40,
+        height: 50,
+        maxHeight: 65,
         width: '100%',
         borderStyle: 'solid',
         borderBottomColor: '#fff',

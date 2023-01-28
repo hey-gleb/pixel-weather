@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
+import dayjs from 'dayjs';
 
 import CityName from '../../atoms/cityName/CityName';
 import DailyWeather, {
     DayWeatherConfig,
-} from '../../components/dailyWeather/dailyWeather';
+} from '../../components/dailyWeather/DailyWeather';
 import CurrentWeather, {
     CurrentWeather as CurrentWeatherType,
 } from '../../components/currentWeather/CurrentWeather';
@@ -15,6 +16,7 @@ import { getDayOfWeek } from '../../utils/date';
 
 const NIGHT_STARTING_HOURS = 20;
 const NEXT_DAYS_WEATHER_LIMIT = 3;
+const DATE_FORMAT_TEMPLATE = 'YYYY-MM-DD';
 
 const bgStyles: Record<string, string[]> = {
     day: ['#2976B8', '#FFFDE4'],
@@ -40,18 +42,17 @@ const Main: React.FC = () => {
     useEffect(() => updateBgStyle(), []);
 
     useEffect(() => {
-        // TODO rework dates handling
-        const curDate = new Date();
-        const startDate = new Date();
-        const endDate = new Date();
-        startDate.setDate(curDate.getDate() + 1);
-        endDate.setDate(curDate.getDate() + NEXT_DAYS_WEATHER_LIMIT);
+        const curDate = dayjs();
+        const startDate = curDate.add(1, 'day').format(DATE_FORMAT_TEMPLATE);
+        const endDate = curDate
+            .add(NEXT_DAYS_WEATHER_LIMIT, 'day')
+            .format(DATE_FORMAT_TEMPLATE);
         getWeather({
             latitude: 59.26,
             longitude: 19.03,
             currentWeather: true,
-            startDate: startDate.toJSON().slice(0, 10),
-            endDate: endDate.toJSON().slice(0, 10),
+            startDate,
+            endDate,
             // TODO add min degrees
             daily: 'temperature_2m_max',
             timezone: 'GMT',
@@ -62,17 +63,13 @@ const Main: React.FC = () => {
                 degrees: curDegrees,
                 weatherCode: response.current_weather.weathercode,
             });
-            const daysWeather = [...Array(NEXT_DAYS_WEATHER_LIMIT).keys()].map(
-                (_, i) => {
-                    curDate.setDate(curDate.getDate() + 1);
-                    return {
-                        dayName: getDayOfWeek(curDate),
-                        degrees: Math.round(
-                            response.daily.temperature_2m_max[i]
-                        ),
-                    };
-                }
-            );
+            const daysWeather = Array.from(
+                Array(NEXT_DAYS_WEATHER_LIMIT),
+                (_, index) => index + 1
+            ).map((_, i) => ({
+                dayName: getDayOfWeek(curDate.date(curDate.date() + i + 1)),
+                degrees: Math.round(response.daily.temperature_2m_max[i]),
+            }));
             setDaysWeather(daysWeather);
         });
     }, []);
@@ -98,7 +95,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
     },
     currentWeather: {
-        flex: 5,
+        flex: 4,
         marginTop: -20,
     },
     image: {
