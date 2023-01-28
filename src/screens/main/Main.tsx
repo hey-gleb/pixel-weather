@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 
-import CityName from '../../components/cityName/CityName';
-import WeekWeather, {
+import CityName from '../../atoms/cityName/CityName';
+import DailyWeather, {
     DayWeatherConfig,
-} from '../../components/weekWeather/WeekWeather';
+} from '../../components/dailyWeather/dailyWeather';
 import CurrentWeather, {
     CurrentWeather as CurrentWeatherType,
 } from '../../components/currentWeather/CurrentWeather';
@@ -32,10 +32,9 @@ const Main: React.FC = () => {
 
     const updateBgStyle = useCallback(() => {
         const curHours = new Date().getHours();
-        // setBgColor(
-        //     curHours >= NIGHT_STARTING_HOURS ? bgStyles.night : bgStyles.day
-        // );
-        setBgColor(bgStyles.rain);
+        setBgColor(
+            curHours >= NIGHT_STARTING_HOURS ? bgStyles.night : bgStyles.day
+        );
     }, []);
 
     useEffect(() => updateBgStyle(), []);
@@ -85,7 +84,7 @@ const Main: React.FC = () => {
                 <CurrentWeather curWeather={currentWeather} />
             </View>
             <Image style={styles.image} source={require('./images/city.png')} />
-            <WeekWeather
+            <DailyWeather
                 style={styles.weekWeather}
                 daysWeatherConfigs={daysWeather}
             />
@@ -94,15 +93,23 @@ const Main: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-    cityName: {},
-    currentWeather: {},
+    cityName: {
+        flex: 1,
+        justifyContent: 'flex-end',
+    },
+    currentWeather: {
+        flex: 5,
+        marginTop: -20,
+    },
     image: {
+        flex: 3,
         width: '100%',
         height: 240,
         flexShrink: 0,
     },
     weekWeather: {
-        marginTop: -5,
+        flex: 3,
+        marginTop: -1,
     },
 });
 

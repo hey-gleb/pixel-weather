@@ -15,10 +15,10 @@ interface Props {
     daysWeatherConfigs?: DayWeatherConfig[];
 }
 
-const WeekWeather: React.FC<Props> = (props) => {
+const DailyWeather: React.FC<Props> = (props) => {
     const { style = {}, daysWeatherConfigs = [] } = props;
 
-    const weekDaysWeather = React.useMemo(() => {
+    const dailyWeather = React.useMemo(() => {
         return daysWeatherConfigs.map(
             (config: DayWeatherConfig, index: number) => (
                 <DayWeather
@@ -31,7 +31,7 @@ const WeekWeather: React.FC<Props> = (props) => {
         );
     }, [daysWeatherConfigs]);
 
-    return <View style={[styles.container, style]}>{weekDaysWeather}</View>;
+    return <View style={[styles.container, style]}>{dailyWeather}</View>;
 };
 
 const styles = StyleSheet.create({
@@ -39,12 +39,12 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 200,
         backgroundColor: '#272536',
-        paddingLeft: 20,
-        paddingRight: 20,
+        paddingLeft: 30,
+        paddingRight: 30,
     },
     dayWeather: {
         marginBottom: 15,
     },
 });
 
-export default WeekWeather;
+export default DailyWeather;

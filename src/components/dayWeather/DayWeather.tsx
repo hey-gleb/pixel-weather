@@ -15,12 +15,14 @@ const DayWeather: React.FC<Props> = (props) => {
     return (
         <View style={[styles.container, style]}>
             <Text style={styles.dayName}>{weekDay}</Text>
-            <Text style={styles.degrees}>{degrees}&#8451;</Text>
-            <Image
-                style={styles.icon}
-                // TODO: replace with svg
-                source={require('./images/sun-icon.png')}
-            />
+            <View style={styles.details}>
+                <Text style={styles.degrees}>{degrees}&#8451;</Text>
+                <Image
+                    style={styles.icon}
+                    // TODO: replace with svg
+                    source={require('./images/sun-icon.png')}
+                />
+            </View>
         </View>
     );
 };
@@ -41,6 +43,14 @@ const styles = StyleSheet.create({
         fontSize: 18,
         lineHeight: 22,
         width: '100%',
+        flex: 4,
+    },
+    details: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
     },
     degrees: {
         color: '#fff',
