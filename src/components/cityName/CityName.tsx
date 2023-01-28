@@ -1,15 +1,15 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, ViewStyle } from 'react-native';
 
 interface Props {
-    styles?: StyleSheet;
+    styles?: ViewStyle;
     cityName: string;
 }
 
 const CityName: React.FC<Props> = (props) => {
     const { styles: propsStyles, cityName } = props;
     return (
-        <View style={[styles.container]}>
+        <View style={[styles.container, propsStyles]}>
             <Text style={styles.cityName}>{cityName}</Text>
         </View>
     );

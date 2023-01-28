@@ -5,7 +5,9 @@ import CityName from '../../components/cityName/CityName';
 import WeekWeather, {
     DayWeatherConfig,
 } from '../../components/weekWeather/WeekWeather';
-import CurrentWeather from '../../components/currentWeather/CurrentWeather';
+import CurrentWeather, {
+    CurrentWeather as CurrentWeatherType,
+} from '../../components/currentWeather/CurrentWeather';
 import MainLayout from '../../layouts/mainLayout/MainLayout';
 
 import getWeather from '../../api/getWeather';
@@ -17,19 +19,23 @@ const NEXT_DAYS_WEATHER_LIMIT = 3;
 const bgStyles: Record<string, string[]> = {
     day: ['#2976B8', '#FFFDE4'],
     night: ['#1D2B64', '#F8CDDA'],
+    rain: ['#3E4F5E', '#D7D2CC'],
+    snow: ['#4B7186', '#E6DADA'],
+    clouds: ['#4FA1DA', '#E4E5E6'],
 };
 
 const Main: React.FC = () => {
-    const [currentWeather, setCurrentWeather] = useState<number>();
+    const [currentWeather, setCurrentWeather] = useState<CurrentWeatherType>();
     const [daysWeather, setDaysWeather] = useState<DayWeatherConfig[]>([]);
 
     const [bgColor, setBgColor] = useState<string[]>([]);
 
     const updateBgStyle = useCallback(() => {
         const curHours = new Date().getHours();
-        setBgColor(
-            curHours >= NIGHT_STARTING_HOURS ? bgStyles.night : bgStyles.day
-        );
+        // setBgColor(
+        //     curHours >= NIGHT_STARTING_HOURS ? bgStyles.night : bgStyles.day
+        // );
+        setBgColor(bgStyles.rain);
     }, []);
 
     useEffect(() => updateBgStyle(), []);
@@ -51,8 +57,12 @@ const Main: React.FC = () => {
             daily: 'temperature_2m_max',
             timezone: 'GMT',
         }).then((response) => {
+            console.log(response);
             const curDegrees = Math.round(response.current_weather.temperature);
-            setCurrentWeather(curDegrees);
+            setCurrentWeather({
+                degrees: curDegrees,
+                weatherCode: response.current_weather.weathercode,
+            });
             const daysWeather = [...Array(NEXT_DAYS_WEATHER_LIMIT).keys()].map(
                 (_, i) => {
                     curDate.setDate(curDate.getDate() + 1);
@@ -70,13 +80,9 @@ const Main: React.FC = () => {
 
     return (
         <MainLayout bgColor={bgColor}>
+            <CityName styles={styles.cityName} cityName={'Katowice'} />
             <View style={styles.currentWeather}>
-                <CityName cityName={'Katowice'} />
-                <CurrentWeather
-                    curWeather={{
-                        degrees: currentWeather,
-                    }}
-                />
+                <CurrentWeather curWeather={currentWeather} />
             </View>
             <Image style={styles.image} source={require('./images/city.png')} />
             <WeekWeather
@@ -88,6 +94,7 @@ const Main: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+    cityName: {},
     currentWeather: {},
     image: {
         width: '100%',

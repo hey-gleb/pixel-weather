@@ -1,23 +1,33 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-interface CurrentWeather {
+import { translateCodeWeather } from '../../utils/weather';
+
+export interface CurrentWeather {
     degrees?: number;
+    weatherCode?: number;
 }
 
+const DEFAULT_CURRENT_WEATHER: CurrentWeather = {
+    degrees: 0,
+    weatherCode: 0,
+};
+
 interface Props {
-    curWeather: CurrentWeather;
+    curWeather?: CurrentWeather;
 }
 
 const CurrentWeather: React.FC<Props> = (props) => {
-    const { curWeather } = props;
+    const { curWeather = DEFAULT_CURRENT_WEATHER } = props;
     return (
         <View style={styles.container}>
             <Text style={styles.degrees}>
                 {curWeather.degrees}
                 <Text style={styles.unit}>&#8451;</Text>
             </Text>
-            <Text style={styles.description}>Sunny</Text>
+            <Text style={styles.description}>
+                {translateCodeWeather(curWeather.weatherCode)}
+            </Text>
         </View>
     );
 };
