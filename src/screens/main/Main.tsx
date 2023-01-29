@@ -39,9 +39,7 @@ const Main: React.FC = () => {
         );
     }, []);
 
-    useEffect(() => updateBgStyle(), []);
-
-    useEffect(() => {
+    const setupWeather = useCallback(() => {
         const curDate = dayjs();
         const startDate = curDate.add(1, 'day').format(DATE_FORMAT_TEMPLATE);
         const endDate = curDate
@@ -74,8 +72,14 @@ const Main: React.FC = () => {
         });
     }, []);
 
+    const handleRefresh = useCallback(() => setupWeather(), []);
+
+    useEffect(() => updateBgStyle(), []);
+
+    useEffect(() => setupWeather(), []);
+
     return (
-        <MainLayout bgColor={bgColor}>
+        <MainLayout bgColor={bgColor} onRefresh={handleRefresh}>
             <CityName styles={styles.cityName} cityName={'Katowice'} />
             <View style={styles.currentWeather}>
                 <CurrentWeather curWeather={currentWeather} />
