@@ -6,13 +6,16 @@ import {
     RefreshControl,
     SafeAreaView,
     ScrollView,
+    ViewStyle,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import Snowfall from 'react-snowfall';
 
 interface Props {
     children: React.ReactNode;
     onRefresh?: () => void;
     bgColor?: string[];
+    styles?: ViewStyle;
 }
 
 const MainLayout: React.FC<Props> = (props) => {
@@ -28,7 +31,7 @@ const MainLayout: React.FC<Props> = (props) => {
     }, []);
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, props.styles]}>
             <StatusBar style="auto" />
             <SafeAreaView style={styles.safeArea}>
                 <LinearGradient colors={bgColor} style={styles.background} />
@@ -42,6 +45,9 @@ const MainLayout: React.FC<Props> = (props) => {
                         />
                     }
                 >
+                    {/*<View style={styles.snowFall}>*/}
+                    {/*    <Snowfall snowflakeCount={100} />*/}
+                    {/*</View>*/}
                     {children}
                 </ScrollView>
             </SafeAreaView>
@@ -55,13 +61,19 @@ const styles = StyleSheet.create({
     scrollView: { flex: 1 },
     scrollViewContainer: { flex: 1, flexGrow: 1 },
     container: { flex: 1 },
+    snowFall: {
+        width: '100%',
+        height: '100%',
+        position: 'absolute',
+        zIndex: -1,
+    },
     background: {
         position: 'absolute',
         left: 0,
         right: 0,
         top: 0,
         height: '100%',
-        zIndex: -1,
+        zIndex: -2,
     },
 });
 

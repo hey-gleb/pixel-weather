@@ -17,6 +17,8 @@ import { getDayOfWeek } from '../../utils/date';
 const NIGHT_STARTING_HOURS = 20;
 const NEXT_DAYS_WEATHER_LIMIT = 3;
 const DATE_FORMAT_TEMPLATE = 'YYYY-MM-DD';
+const SUN_ICON_WIDTH = 100;
+const SUN_ICON_HEIGHT = 100;
 
 const bgStyles: Record<string, string[]> = {
     day: ['#2976B8', '#FFFDE4'],
@@ -35,7 +37,8 @@ const Main: React.FC = () => {
     const updateBgStyle = useCallback(() => {
         const curHours = new Date().getHours();
         setBgColor(
-            curHours >= NIGHT_STARTING_HOURS ? bgStyles.night : bgStyles.day
+            // curHours >= NIGHT_STARTING_HOURS ? bgStyles.night : bgStyles.day
+            bgStyles.day
         );
     }, []);
 
@@ -80,9 +83,16 @@ const Main: React.FC = () => {
 
     return (
         <MainLayout bgColor={bgColor} onRefresh={handleRefresh}>
-            <CityName styles={styles.cityName} cityName={'Katowice'} />
-            <View style={styles.currentWeather}>
-                <CurrentWeather curWeather={currentWeather} />
+            <Image
+                style={styles.sunImage}
+                source={require('./images/sun.svg')}
+            />
+            <View style={styles.mainInfo}>
+                <CityName styles={styles.cityName} cityName={'Katowice'} />
+                <CurrentWeather
+                    style={styles.currentWeather}
+                    curWeather={currentWeather}
+                />
             </View>
             <Image style={styles.image} source={require('./images/city.png')} />
             <DailyWeather
@@ -93,23 +103,52 @@ const Main: React.FC = () => {
     );
 };
 
+const getSunPathCoordinate = (val: number) => {
+    return -0.1667 * Math.pow(val, 2) + 2 * val;
+};
+
+const screenWidth = window.screen.width;
+const currentHour = parseInt(dayjs().format('h').toString());
+const xSlot = Math.round(screenWidth / 12);
+const sunLeftPosition = xSlot * currentHour - SUN_ICON_WIDTH / 2;
+// 400px is an offset from bottom border
+// 100px is a place for the sun move
+// TODO add calculation for offset and movable slot
+const sunBottomPosition =
+    Math.round((100 / 6) * getSunPathCoordinate(currentHour)) +
+    450 -
+    SUN_ICON_HEIGHT / 2;
+
 const styles = StyleSheet.create({
+    layout: {
+        marginTop: 100,
+    },
     cityName: {
-        flex: 1,
-        justifyContent: 'flex-end',
+        flex: 2,
+        justifyContent: 'center',
     },
     currentWeather: {
-        flex: 4,
-        marginTop: -20,
+        flex: 3,
+        justifyContent: 'flex-start',
+    },
+    mainInfo: {
+        flex: 2,
+    },
+    sunImage: {
+        width: SUN_ICON_WIDTH,
+        height: SUN_ICON_HEIGHT,
+        position: 'absolute',
+        bottom: sunBottomPosition,
+        left: sunLeftPosition,
     },
     image: {
-        flex: 3,
+        flex: 1,
         width: '100%',
         height: 240,
         flexShrink: 0,
     },
     weekWeather: {
-        flex: 3,
+        flex: 1,
         marginTop: -1,
     },
 });
